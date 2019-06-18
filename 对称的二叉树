@@ -1,0 +1,127 @@
+# 剑指offer- 对称的二叉树
+题目描述： 请实现一个函数，用来判断一颗二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
+
+## 解题思路：
+- 对称的二叉树，它的前序遍历序列（根-左-右）和对称前序遍历序列（根-右-左）是一样的。 
+- 原创思路：先做二叉树镜像，然后判断是否同一棵树。（没尝试过，可能会超时。）
+
+## 解法一：非递归写法
+  - 生成前序遍历序列，和对称前序遍历序列，然后对比两个序列。
+  - 遇到的空指针也要加入到序列当中。
+  - 遇到的空指针，往序列里面插入INT_MAX。不要插入NULL。插入NULL的话，如果节点值为0 则会判断与NULL是相等。 用NULL 在牛客网上能通过， 在leetcode
+  上则无法通过
+  
+ ```c++
+ /**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSymmetric(TreeNode* pRoot) 
+        {   
+        vector<int> leftToRight_preOrder{};
+        vector<int> rightToLeft_preOrder{};
+        
+        auto curr = pRoot;
+        TreeNode* stack_top;
+        std::stack<TreeNode*> temp;
+     
+     
+        while(curr!=nullptr || !temp.empty()){
+            while(curr!=nullptr){
+                leftToRight_preOrder.push_back(curr->val);
+                temp.push(curr);
+                curr=curr->left;
+            }
+          
+            leftToRight_preOrder.push_back(INT_MAX);
+            
+            
+            stack_top = temp.top();
+            temp.pop();
+            curr= stack_top->right;
+            
+        }
+     
+         curr = pRoot;
+         stack_top = nullptr;
+     
+         while(curr!=nullptr || !temp.empty()){
+             while(curr!=nullptr){
+                 rightToLeft_preOrder.push_back(curr->val);
+                 temp.push(curr);
+                 curr=curr->right;
+             }         
+             
+            rightToLeft_preOrder.push_back(INT_MAX);
+            
+             
+             
+             
+             stack_top = temp.top();
+             temp.pop();
+             curr = stack_top->left;
+             
+         }
+     
+         if(leftToRight_preOrder == rightToLeft_preOrder){
+             return true;
+         }else{
+             return false;
+         }
+         
+    
+    }
+};
+ ```
+ 
+ ## 解法二： 递归写法
+   - 实质上是转换成两棵树是否相同的问题。
+   - 先判断跟节点是否相等。
+   - 若相等，则判断左节点的左子树和右节点的右子树是否相等， 以及左节点的右子树和右节点的左子树是否相等。
+ 
+ ```c++
+ /*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    bool isSymmetrical(TreeNode* pRoot)
+    {   
+        return isSym(pRoot, pRoot);
+         
+    
+    }
+    
+    bool isSym(TreeNode* pRoot1, TreeNode* pRoot2){
+        
+        
+        if(pRoot1== nullptr && pRoot2 == nullptr){return true;}
+        if(pRoot1==nullptr || pRoot2== nullptr){return false;}
+        
+        if(pRoot1->val == pRoot2->val){
+            
+            return isSym(pRoot1->left, pRoot2->right) && isSym(pRoot1->right, pRoot2->left); 
+            
+        }else{
+            return false;}
+        
+        
+    }
+    
+
+};
+ ```
