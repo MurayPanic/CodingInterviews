@@ -73,8 +73,12 @@ public:
 
 ## 解法二：借助STL容器multiset
 - 使用multiset 存储最小的k个数
-- multiset里面存储的元素会自动排序， 注意选用greater模式，让大的元素排在前面。这样可以防止后续删除指针所引起的失效问题。
+- multiset里面存储的元素会自动排序， 可以选用greater模式，让大的元素排在前面。这样可以防止后续删除指针所引起的失效问题。
+- 如果不选用greater 模式， 在删除元素的时候，注意必须使用（--iter）。因为删除的是末尾的元素，如果使用（iter--）使用的是iter原来的值， 往往是multiset.end(), 会导致erase（）操作出错。
 - 按顺序遍历数组，每次遇到比multiset里面最大的元素要小的元素时，则插入元素， 并删除头部元素
+
+
+### 使用multiset<int, greater<int>>
 
 ```c++
 
@@ -109,4 +113,37 @@ public:
     }
 };
 ```
-- 
+### 使用multiset<int>
+```
+
+
+class Solution {
+public:
+    vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
+        multiset<int > tmp;
+        
+        if( k== 0 || input.empty() ||k > input.size()){ 
+            vector<int> nothing;
+            return nothing;}
+        
+        for(auto item : input){
+            if (tmp.size()<k){tmp.insert(item);}
+            
+            else if(tmp.size()==k){
+                
+                if(item < *(--tmp.end()) ){
+                    tmp.erase(--tmp.end());
+                    tmp.insert(item);
+                    
+                }
+            }
+            
+        }
+        
+        
+        vector<int> result( tmp.begin(), tmp.end() );
+        return result;
+        
+    }
+};
+```
