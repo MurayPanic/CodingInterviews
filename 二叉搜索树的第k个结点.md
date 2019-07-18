@@ -42,3 +42,53 @@ public:
 
 };
 ```
+
+### 解法二： 中序遍历非递归实现
+- 与解法一思路一致；
+- 中序遍历用的是非递归写法。
+
+```c++
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    vector<TreeNode*> inOrder;
+    TreeNode* KthNode(TreeNode* pRoot, int k)
+    {
+        if(pRoot==nullptr||k==0){return nullptr;}
+        inOrderTraversal(pRoot);
+
+        TreeNode* result = k<=inOrder.size() ? inOrder[k-1]: nullptr;
+        return result;
+    }
+
+
+    void inOrderTraversal(TreeNode* pointer){
+        stack<TreeNode*> assist_stack;
+        while(pointer!=nullptr || !assist_stack.empty()){
+            while(pointer!=nullptr){
+                assist_stack.push(pointer);
+                pointer = pointer->left;
+            }
+
+            if(!assist_stack.empty()){
+                pointer = assist_stack.top();
+                inOrder.push_back(pointer);
+                assist_stack.pop();
+                pointer=pointer->right;
+            }
+        }
+    }
+
+
+};
+```
+
