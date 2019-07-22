@@ -28,8 +28,17 @@ int main(){
 	for(int i =0; i<bitshow.size();++i){
 		cout<< "The"<<i << " digit is :" <<bitshow[i] <<endl;
 	}
+       
+	cout << "Now try to add two bit number: " <<endl;
+	int b=5;
+	bitset<sizeof(int)*8>  bitOfb(b);
 
+	cout <<"Original b: "<< b <<endl;
+	cout <<"Show in bit: "<< bitOfb<<endl;
+	cout <<"The sum of b+c is : " << b+c <<endl;
+	cout << "The sum of bit is : " << (bitOfb ^ bitshow) <<endl;
 
-
+	bitset<sizeof(int)> bitOfSum(b+c);
+	cout << "The bit show of b+c is : " <<bitOfSum <<endl;
 	return 0;
 }
